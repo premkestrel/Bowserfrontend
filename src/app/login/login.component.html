@@ -1,0 +1,246 @@
+
+<div class="container"  style="margin-top:40px; padding:20px; background-color:#eff0f2;border-radius:15px;
+-webkit-box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.2);
+-moz-box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.2);
+box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.2);">
+
+
+<div *ngIf="this.status==0"class="toast-header">
+  <strong class="mr-auto">Error Conneting ! . . . .</strong>
+  <small>Close</small>
+  <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close" (click)=" this.status=null">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+
+<div *ngIf="regv && this.loginv!=1&&this.loginv!=10">
+  <div class="col-sm-12 text-info display-1 text-strong" style="text-align:center;">
+    Login
+  </div>
+
+  <div class="col-sm-12">
+    <form [formGroup]="logingroup" (ngSubmit)="login()">
+        <div class="form-group text-info ">
+          <label class="display-4" for="username">Username:</label>
+          <input type="text" id="username" class="form-control" formControlName="username" autocomplete="off">
+        </div>
+        <div class="form-group text-info">
+            <label class="display-4" for="password">Password:</label>
+            <input type="text" id="password" class="form-control" formControlName="password" autocomplete="off"> 
+          </div>
+       <button type="submit" class="btn btn-primary btn-block" [disabled]=this.logingroup.invalid>Login</button><br>
+      
+       <span *ngIf="this.loginv==-1" class="text-danger">*you are not registered!</span>
+       <span *ngIf="this.loginv==0" class="text-danger">*incorrect password!</span>
+
+      </form>
+      <button type="button" class="btn btn-secondary btn-block" (click)="register1()">Register</button>
+      <button type="button" class="btn btn-secondary btn-block" (click)="this.logingroup.setValue({username:null,password:null});">Reset</button>
+
+        
+
+  </div>
+  </div>
+  <!-- register -->
+  <div *ngIf="regv==0">
+    <button type="button" class="btn text-dark btn1 " (click)="rb()" ><i class="fas fa-arrow-left"></i>Back</button><br>
+    <div class="col-sm-12 text-info display-1 text-strong" style="text-align:center;">
+      Register
+    </div>
+    <div class="col-sm-12" *ngIf="this.successmsg==null">
+      <form [formGroup]="registergroup" (ngSubmit)="register()">
+          <div class="form-group text-info ">
+            <label class="display-4" for="username">Username:</label>
+            <input type="text" id="username" class="form-control" formControlName="username" autocomplete="off">
+          </div>
+          <div class="form-group text-info">
+              <label class="form-control-label display-4" for="password">Password:</label>
+              <input type="text" id="password" class="form-control" formControlName="password" autocomplete="off">
+            </div>
+            <div class="form-group text-info">
+              <div class=" has-danger">
+                <label class="form-control-label display-4" for="inputDanger1">ConfirmPassword:</label>
+                <input type="text" value="wrong value" class="form-control" autocomplete="off" [ngClass]="{'is-valid': this.registergroup.controls.password.value==this.registergroup.controls.ConfirmPassword.value&&this.registergroup.controls.ConfirmPassword.dirty&&this.registergroup.valid,'is-invalid': this.registergroup.controls.ConfirmPassword.dirty&& this.registergroup.controls.password.value!=this.registergroup.controls.ConfirmPassword.value&&this.registergroup.valid}" formControlName="ConfirmPassword">
+                <div class="valid-feedback">password matched</div>
+                <div class="invalid-feedback">*password mismatch</div>
+              </div>
+            </div>
+         <button type="submit" class="btn btn-primary btn-block" [disabled]=this.registergroup.invalid>Register</button><br>
+       <span *ngIf="this.errormsg" class="text-danger">*{{this.errormsg}}</span>
+        </form>
+      
+        
+</div>
+<div class="alert alert-dismissible alert-success" *ngIf="this.successmsg">
+            <button type="button" class="close" data-dismiss="alert"(click)="reset()">&times;</button>
+            <h4 class="alert-heading">Message:</h4>
+            <strong>*{{this.successmsg}}</strong> 
+          </div>
+    </div>
+
+
+
+  <!-- admin -->
+  <div *ngIf="(this.loginv==10&&this.gurls==null)&&(this.clicknum==0)&&(this.lb==1)">
+    <button type="button" class="btn btn-primary btn-block" (click)="logout()" >Logout</button><br>
+  <div class="text-center text-dark display-4">
+    <p>Enter Access Key</p>
+  </div>
+  <form [formGroup]="admingroup" (ngSubmit)="addkey()">
+    <input type="text" id="keyword" class="form-control" formControlName="keyword" autocomplete="off">
+<button class="btn  btn-block btn-info" type="submit" [disabled]=this.admingroup.invalid>AddKey</button>
+</form>
+<button class="btn  btn-block btn-outline-warning" type="submit" (click)="dblist()">Registered User</button>
+<a href="https://serpstack.com/documentation" target="_blank">To Get AccessKey</a>
+  </div>
+  <div *ngIf="this.dblistv">
+    <hr style="background-color: #292b2c;">
+    <div class="container" *ngIf="this.dblistv">
+      <div class="row">
+        <div class="col-md-4 text-center text-warning text-capitalize">
+       <h3>UserName</h3> 
+        </div>
+        <div class="col-md-3 text-center text-warning">
+       <h3>Password</h3> 
+        </div>
+        <div class="col-md-3 text-center text-warning">
+        <h3> Keyword</h3>
+        </div>
+      </div>
+      <hr style="background-color: #292b2c;">
+      <div class="alert alert-dismissible alert-success" *ngIf="this.delete1">
+    <button type="button" class="close" data-dismiss="alert" (click)="this.delete1=null">&times;</button>
+    <strong>{{this.delete1}}</strong>
+  </div>
+      <div *ngFor="let data of dblistv">
+          <div class="row text-center text-justify " *ngIf="data.username!='iamadmin'">
+          <div class="col-md-4 text-center text-justify text-dark">
+           {{data.username}}
+          </div>
+          <div class="col-md-3 text-center text-justify text-dark">
+            {{data.password}}
+          </div>
+          <div class="col-md-3 text-center text-justify text-dark">
+            <p *ngIf="data.keyword==null">Not Yet</p>{{data.keyword}}
+          </div>
+          <div class="col-md-1 text-center">
+  <!-- <input type="submit" class="btn fa fa-trash-o" style="font-size: 20px;color:red;" value="&#xf014;" (click)="delete(data._id)"/> -->
+  <button type="button" class="btn1 btn text-danger" (click)="delete(data._id)" ><i class="fas fa-trash-alt"></i></button><br>
+          </div>
+          
+      </div>
+      <hr *ngIf="data.username!='iamadmin'" style="background-color: #5bc0de;"> 
+      </div>
+  </div>
+
+  </div>
+  <div class="alert alert-dismissible alert-success" *ngIf="this.successmsg&&this.loginv==10">
+    <button type="button" class="close" data-dismiss="alert" (click)="reset()">&times;</button>
+    <strong>{{this.successmsg}}</strong>
+  </div>
+
+
+
+
+
+
+    <!-- to enable search bar -->
+<div *ngIf="(this.loginv==1&&this.gurls==null)&&(this.clicknum==0)&&(this.lb==1)">
+ 
+  <button type="button" class="btn btn-primary btn-block" (click)="logout()" >Logout</button><br>
+
+  <div class="text-center text-dark display-4">
+    <p>Search with keyword</p>
+  </div>
+
+    <form [formGroup]="searchgroup" (ngSubmit)="search()">
+        <input type="text" id="ConfirmPassword" class="form-control" formControlName="keyword" autocomplete="off">
+    <button class="btn  btn-block btn-info" type="submit" [disabled]=this.searchgroup.invalid>Search</button>
+</form>
+</div>
+<div *ngIf="this.errormsg!=null&&this.v&&this.st==-1"class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="toast-header">
+    <strong class="mr-auto">Message</strong>
+    <small>Close</small>
+    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close" (click)="this.clicknum=this.v=0">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="toast-body">
+    {{this.errormsg}}
+  </div>
+</div>
+<div *ngIf="(this.loginv==1&&this.gurls==null)&&(this.clicknum==1)&&this.errormsg==null">
+  <div class="loader"  style="
+  
+  position: fixed;
+  top:0;
+  bottom:0;
+left:0;
+right:0;
+  margin: auto;
+"></div>
+  <p class="text-center text-info display-3">Fetching result</p>
+  
+</div>
+<div *ngIf="this.gurls">
+  <!-- <input type="submit" value="Back" (click)="reset1()"/> -->
+  <button type="button" class="btn text-dark btn1 " (click)="reset1()" ><i class="fas fa-arrow-left"></i>Back</button><br>
+ <!--  -->
+ <div *ngIf="this.status==0"class="toast-header">
+  <strong class="mr-auto">Error Conneting ! . . . .</strong>
+  <small>Close</small>
+  <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close" (click)=" this.status=null">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+ 
+ 
+  <!--  -->
+  <div class="text-center text-dark display-4"><p>Results - click + icons to save </p></div>
+  <div *ngIf="this.st!=1&&this.st!=null&&this.errormsg"class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="mr-auto">Message</strong>
+      <small>Close</small>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close" (click)="this.st=null">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="toast-body">
+      {{this.errormsg}} or accesskey
+    </div>
+  </div>
+  <div *ngIf="this.con==1 &&this.successmsg"class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="mr-auto">Message</strong>
+      <small>Close</small>
+      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close" (click)="this.con=0">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="toast-body">
+      {{ this.successmsg}}
+    </div>
+  </div>
+  <!-- <div *ngFor="let url1 of gurls ; let i=index" >
+      <div class="alert alert-dismissible alert-light ">
+        <button type="button" class="close glyphicon glyphicon-plus"  data-dismiss="alert" (click)="uadd(i)">&#x2b;</button>
+        <a  href={{url1.url}} target="_blank">{{url1.title}}</a><br>
+        <p class="text-dark">{{url1.snippet}}</p>
+      </div>
+      </div> -->
+      <cdk-virtual-scroll-viewport itemSize="150" class="example-viewport">
+        <div *cdkVirtualFor="let url1 of gurls ; let i=index" class="example-item">
+          <div class="alert alert-dismissible alert-light ">
+          <button type="button" class="close glyphicon glyphicon-plus"  data-dismiss="alert" (click)="uadd(i)">&#x2b;</button>
+          <a  href={{url1.url}} target="_blank">{{url1.title}}</a><br>
+          <p class="text-dark">{{url1.snippet}}</p>
+        </div>
+      </div>
+      </cdk-virtual-scroll-viewport>
+      
+   
+
+</div>
+</div>
