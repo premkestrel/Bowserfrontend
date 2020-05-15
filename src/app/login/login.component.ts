@@ -9,11 +9,12 @@ import{CallService} from "../call.service";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-loginvalid:any;
+  hide:boolean=true;
+  loginvalid:any;
 v:any=true;
 username:any;
 password:any;
-loginv:number;
+loginv:number=null;
 ConfirmPassword:any
 gurls:any=null;
 regv:any=1;
@@ -63,12 +64,14 @@ listgroup:FormGroup;
   }
   login(){
     this.successmsg=null;
+    this.dblistv=null;
     this.callservice.login(this.logingroup.value).subscribe((response)=>{
       // console.log(response);
       // this.admin=0;
       // if(response["value"]!=10){
         this.lb=1;
         this.loginv=response["value"];
+        
         // this.logingroup.setValue({keyword:null});
 
       // }
@@ -82,6 +85,8 @@ listgroup:FormGroup;
   }
   rb(){
     this.regv=1;
+    this.loginv=null;
+    this.logingroup.setValue({username:null,password:null});
     this.registergroup.setValue({username:null,password:null,ConfirmPassword:null});
   }
   reset(){
@@ -99,12 +104,14 @@ this.logingroup.setValue({username:null,password:null});
 this.errormsg=null;
     this.regv=0;
     this.show=true;
+    this.hide=true;
   }
   register()
 {this.loginv=2;
   this.successmsg=null;
 this.errormsg=null;
 this.show=false;
+
   this.callservice.register(this.registergroup.value).subscribe(response=>{
     // console.log(response);
     this.connection=null;
@@ -187,6 +194,7 @@ logout(){
   this.loginv=null;
   this.dblistv=null;
   this.lb=0;
+  this.hide=true;
 }
 addkey(){
   this.successmsg=null;
@@ -201,6 +209,7 @@ this.errormsg=null;
 dblist(){
   this.callservice.dblist().subscribe(response=>{
     this.dblistv=response;
+    console.log(this.dblistv);
   })
 }
 delete(data){

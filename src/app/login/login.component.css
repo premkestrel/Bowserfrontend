@@ -38,4 +38,11 @@
   .example-item {
     height: 50%;
   }
-  
+  .errspan {
+    float: right;
+    margin-right: 6px;
+    margin-top: -27px;
+    position: relative;
+    z-index: 2;
+    color:	#000000;
+}
