@@ -30,7 +30,7 @@ export class CallService {
   }
   addkey(data){
     return this.httpClient.post("api/admin",data); 
-    // return this.httpClient.post("http://localhost:3000/api/admin",data); 
+    // return this.httpClient.post("http://localhost:3000/api/admin",data); ffffff
 
   }
   dblist(){
