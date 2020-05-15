@@ -4,7 +4,7 @@
     border-top: 16px solid #3498db;
     width: 120px;
     height: 120px;
-    /* display: inline-block; */
+    /* display: inline-block;gg */
     -webkit-animation: spin 2s linear infinite;
     animation: spin 2s linear infinite;
   }
